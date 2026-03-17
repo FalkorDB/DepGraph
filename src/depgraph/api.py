@@ -8,6 +8,9 @@ from typing import Any
 
 import structlog
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from depgraph.config import load_config
 from depgraph.db import GraphDB
@@ -56,6 +59,13 @@ app = FastAPI(
     description="Package Dependency Impact Analyzer powered by FalkorDB",
     version="0.1.0",
     lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -195,3 +205,174 @@ def seed_data(
 
     save_ecosystem(data, save_path)
     return ingest_ecosystem(_db.graph, data)
+
+
+# --- Graph Visualization Data ---
+
+# Color palette for node labels
+_LABEL_COLORS: dict[str, str] = {
+    "Package": "#4ECDC4",
+    "Vulnerability": "#FF6B6B",
+    "Maintainer": "#45B7D1",
+}
+
+_RELATIONSHIP_COLORS: dict[str, str] = {
+    "DEPENDS_ON": "#888888",
+    "AFFECTS": "#FF6B6B",
+    "MAINTAINS": "#45B7D1",
+}
+
+
+def _build_graph_data(
+    graph: Any,
+    node_query: str,
+    link_query: str,
+    node_params: dict[str, Any] | None = None,
+    link_params: dict[str, Any] | None = None,
+    highlight_nodes: set[str] | None = None,
+    highlight_color: str = "#FFD93D",
+    size_map: dict[str, int] | None = None,
+) -> dict[str, Any]:
+    """Build canvas-compatible graph data from Cypher queries."""
+    nodes_result = graph.query(node_query, node_params or {})
+    links_result = graph.query(link_query, link_params or {})
+
+    node_id_map: dict[str, int] = {}
+    nodes: list[dict[str, Any]] = []
+    for i, row in enumerate(nodes_result.result_set):
+        name, label = row[0], row[1]
+        if name in node_id_map:
+            continue
+        nid = i + 1
+        node_id_map[name] = nid
+        color = _LABEL_COLORS.get(label, "#999999")
+        if highlight_nodes and name in highlight_nodes:
+            color = highlight_color
+        size = 6
+        if size_map and name in size_map:
+            size = size_map[name]
+        nodes.append(
+            {
+                "id": nid,
+                "labels": [label],
+                "color": color,
+                "visible": True,
+                "size": size,
+                "data": {"name": name, "label": label},
+            }
+        )
+
+    links: list[dict[str, Any]] = []
+    link_id = 1
+    for row in links_result.result_set:
+        src_name, tgt_name, rel_type = row[0], row[1], row[2]
+        src_id = node_id_map.get(src_name)
+        tgt_id = node_id_map.get(tgt_name)
+        if src_id and tgt_id:
+            links.append(
+                {
+                    "id": link_id,
+                    "relationship": rel_type,
+                    "color": _RELATIONSHIP_COLORS.get(rel_type, "#AAAAAA"),
+                    "source": src_id,
+                    "target": tgt_id,
+                    "visible": True,
+                    "data": {"type": rel_type},
+                }
+            )
+            link_id += 1
+
+    return {"nodes": nodes, "links": links}
+
+
+@app.get("/graph/data")
+def graph_data() -> dict[str, Any]:
+    """Full graph data for canvas visualization."""
+    if _db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    return _build_graph_data(
+        _db.graph,
+        node_query="MATCH (n) RETURN n.name AS name, head(labels(n)) AS label",
+        link_query=("MATCH (a)-[r]->(b) RETURN a.name AS src, b.name AS tgt, type(r) AS rel"),
+    )
+
+
+@app.get("/graph/blast-radius/{package_name}")
+def graph_blast_radius(package_name: str) -> dict[str, Any]:
+    """Subgraph showing blast radius for a package."""
+    if _db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    engine = _get_engine()
+    pkg = engine.get_package(package_name)
+    if pkg is None:
+        raise HTTPException(status_code=404, detail=f"Package '{package_name}' not found")
+
+    result = engine.blast_radius(package_name)
+    affected_names = {ap.name for ap in result.affected_packages}
+    affected_names.add(package_name)
+
+    # Build subgraph of only relevant nodes
+    return _build_graph_data(
+        _db.graph,
+        node_query=(
+            "MATCH (n:Package) WHERE n.name IN $names "
+            "RETURN n.name AS name, head(labels(n)) AS label"
+        ),
+        link_query=(
+            "MATCH (a:Package)-[r:DEPENDS_ON]->(b:Package) "
+            "WHERE a.name IN $names AND b.name IN $names "
+            "RETURN a.name AS src, b.name AS tgt, type(r) AS rel"
+        ),
+        node_params={"names": list(affected_names)},
+        link_params={"names": list(affected_names)},
+        highlight_nodes={package_name},
+        highlight_color="#FF6B6B",
+    )
+
+
+@app.get("/graph/cycles")
+def graph_cycles() -> dict[str, Any]:
+    """Subgraph highlighting cycle nodes."""
+    if _db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    engine = _get_engine()
+    cycle_result = engine.find_cycles()
+    cycle_nodes: set[str] = set()
+    for cycle in cycle_result.cycles:
+        cycle_nodes.update(cycle)
+
+    if not cycle_nodes:
+        return {"nodes": [], "links": []}
+
+    return _build_graph_data(
+        _db.graph,
+        node_query=(
+            "MATCH (n:Package) WHERE n.name IN $names "
+            "RETURN n.name AS name, head(labels(n)) AS label"
+        ),
+        link_query=(
+            "MATCH (a:Package)-[r:DEPENDS_ON]->(b:Package) "
+            "WHERE a.name IN $names AND b.name IN $names "
+            "RETURN a.name AS src, b.name AS tgt, type(r) AS rel"
+        ),
+        node_params={"names": list(cycle_nodes)},
+        link_params={"names": list(cycle_nodes)},
+        highlight_nodes=cycle_nodes,
+        highlight_color="#FF6B6B",
+    )
+
+
+# --- Static files for frontend SPA ---
+
+_STATIC_DIR = Path(__file__).resolve().parent.parent.parent / "static"
+
+if _STATIC_DIR.is_dir():
+    app.mount("/assets", StaticFiles(directory=_STATIC_DIR / "assets"), name="assets")
+
+    @app.get("/{full_path:path}")
+    def serve_spa(full_path: str) -> FileResponse:
+        """Serve the React SPA for any unmatched routes."""
+        file_path = _STATIC_DIR / full_path
+        if file_path.is_file():
+            return FileResponse(file_path)
+        return FileResponse(_STATIC_DIR / "index.html")

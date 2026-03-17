@@ -1,0 +1,1096 @@
+{
+  "packages": [
+    {
+      "name": "express",
+      "version": "11.3.0",
+      "license": "GPL-3.0",
+      "description": "Fast web framework",
+      "downloads": 18457905
+    },
+    {
+      "name": "fastify",
+      "version": "4.7.2",
+      "license": "GPL-3.0",
+      "description": "High-performance web framework",
+      "downloads": 6879334
+    },
+    {
+      "name": "koa",
+      "version": "11.17.1",
+      "license": "ISC",
+      "description": "Middleware-based web framework",
+      "downloads": 28315694
+    },
+    {
+      "name": "hapi",
+      "version": "1.0.1",
+      "license": "MIT",
+      "description": "Enterprise web framework",
+      "downloads": 15614608
+    },
+    {
+      "name": "flask-core",
+      "version": "9.19.0",
+      "license": "BSD-2-Clause",
+      "description": "Lightweight web framework",
+      "downloads": 13344768
+    },
+    {
+      "name": "axios",
+      "version": "12.20.8",
+      "license": "Apache-2.0",
+      "description": "HTTP client library",
+      "downloads": 14794519
+    },
+    {
+      "name": "node-fetch",
+      "version": "8.18.4",
+      "license": "MPL-2.0",
+      "description": "Fetch API for Node.js",
+      "downloads": 437124
+    },
+    {
+      "name": "got",
+      "version": "13.5.6",
+      "license": "Apache-2.0",
+      "description": "HTTP request library",
+      "downloads": 18648630
+    },
+    {
+      "name": "superagent",
+      "version": "3.6.5",
+      "license": "MIT",
+      "description": "Progressive HTTP client",
+      "downloads": 6225068
+    },
+    {
+      "name": "lodash",
+      "version": "7.3.5",
+      "license": "Apache-2.0",
+      "description": "Utility library for common operations",
+      "downloads": 40516368
+    },
+    {
+      "name": "underscore",
+      "version": "5.1.7",
+      "license": "BSD-2-Clause",
+      "description": "Functional programming helpers",
+      "downloads": 8377941
+    },
+    {
+      "name": "ramda",
+      "version": "15.12.1",
+      "license": "BSD-2-Clause",
+      "description": "Practical functional library",
+      "downloads": 19675861
+    },
+    {
+      "name": "date-fns",
+      "version": "14.20.9",
+      "license": "Apache-2.0",
+      "description": "Modern date utility library",
+      "downloads": 38746446
+    },
+    {
+      "name": "moment",
+      "version": "4.2.0",
+      "license": "LGPL-3.0",
+      "description": "Date manipulation library",
+      "downloads": 15294994
+    },
+    {
+      "name": "uuid",
+      "version": "13.9.1",
+      "license": "MIT",
+      "description": "UUID generation library",
+      "downloads": 6779091
+    },
+    {
+      "name": "nanoid",
+      "version": "7.8.7",
+      "license": "LGPL-3.0",
+      "description": "Tiny unique string generator",
+      "downloads": 24484473
+    },
+    {
+      "name": "helmet",
+      "version": "3.11.5",
+      "license": "MIT",
+      "description": "HTTP security headers",
+      "downloads": 44975694
+    },
+    {
+      "name": "cors",
+      "version": "5.20.1",
+      "license": "ISC",
+      "description": "Cross-origin resource sharing",
+      "downloads": 42613671
+    },
+    {
+      "name": "csrf-shield",
+      "version": "3.17.3",
+      "license": "MIT",
+      "description": "CSRF protection middleware",
+      "downloads": 31022757
+    },
+    {
+      "name": "bcrypt-lib",
+      "version": "7.8.10",
+      "license": "GPL-3.0",
+      "description": "Password hashing library",
+      "downloads": 37377264
+    },
+    {
+      "name": "jsonwebtoken",
+      "version": "4.10.0",
+      "license": "MIT",
+      "description": "JWT implementation",
+      "downloads": 2155210
+    },
+    {
+      "name": "knex",
+      "version": "13.10.6",
+      "license": "MIT",
+      "description": "SQL query builder",
+      "downloads": 4442842
+    },
+    {
+      "name": "sequelize",
+      "version": "4.18.5",
+      "license": "MIT",
+      "description": "ORM for SQL databases",
+      "downloads": 43986744
+    },
+    {
+      "name": "typeorm",
+      "version": "8.12.10",
+      "license": "BSD-3-Clause",
+      "description": "TypeScript ORM",
+      "downloads": 9588950
+    },
+    {
+      "name": "prisma-client",
+      "version": "5.4.3",
+      "license": "GPL-3.0",
+      "description": "Next-gen database client",
+      "downloads": 37673777
+    },
+    {
+      "name": "mongoose",
+      "version": "9.8.9",
+      "license": "Apache-2.0",
+      "description": "MongoDB object modeling",
+      "downloads": 39161231
+    },
+    {
+      "name": "redis-client",
+      "version": "7.11.3",
+      "license": "MIT",
+      "description": "Redis client library",
+      "downloads": 34194730
+    },
+    {
+      "name": "pg-driver",
+      "version": "8.2.0",
+      "license": "MIT",
+      "description": "PostgreSQL driver",
+      "downloads": 10258007
+    },
+    {
+      "name": "joi",
+      "version": "11.5.10",
+      "license": "Apache-2.0",
+      "description": "Schema validation",
+      "downloads": 40025332
+    },
+    {
+      "name": "zod-core",
+      "version": "2.12.6",
+      "license": "ISC",
+      "description": "TypeScript-first schema validation",
+      "downloads": 31411296
+    },
+    {
+      "name": "yup",
+      "version": "9.8.8",
+      "license": "MIT",
+      "description": "Object schema validation",
+      "downloads": 45654046
+    },
+    {
+      "name": "ajv",
+      "version": "12.3.10",
+      "license": "BSD-2-Clause",
+      "description": "JSON Schema validator",
+      "downloads": 17907335
+    },
+    {
+      "name": "winston",
+      "version": "13.20.5",
+      "license": "MIT",
+      "description": "Universal logging library",
+      "downloads": 19697460
+    },
+    {
+      "name": "pino",
+      "version": "7.5.7",
+      "license": "MIT",
+      "description": "Low-overhead JSON logger",
+      "downloads": 48459777
+    },
+    {
+      "name": "bunyan",
+      "version": "15.8.8",
+      "license": "MPL-2.0",
+      "description": "Structured logging for Node",
+      "downloads": 11990124
+    },
+    {
+      "name": "debug-util",
+      "version": "9.3.10",
+      "license": "MIT",
+      "description": "Tiny debugging utility",
+      "downloads": 42880174
+    },
+    {
+      "name": "jest-core",
+      "version": "9.19.3",
+      "license": "MIT",
+      "description": "Testing framework",
+      "downloads": 25093933
+    },
+    {
+      "name": "mocha",
+      "version": "13.5.8",
+      "license": "MPL-2.0",
+      "description": "Feature-rich test framework",
+      "downloads": 35592432
+    },
+    {
+      "name": "chai",
+      "version": "15.0.9",
+      "license": "Apache-2.0",
+      "description": "BDD/TDD assertion library",
+      "downloads": 32790774
+    },
+    {
+      "name": "sinon",
+      "version": "1.3.5",
+      "license": "MPL-2.0",
+      "description": "Standalone test spies, stubs, mocks",
+      "downloads": 20637923
+    },
+    {
+      "name": "supertest",
+      "version": "4.1.3",
+      "license": "ISC",
+      "description": "HTTP assertions for testing",
+      "downloads": 5286296
+    },
+    {
+      "name": "dotenv",
+      "version": "2.15.1",
+      "license": "MPL-2.0",
+      "description": "Environment variable loader",
+      "downloads": 35750305
+    },
+    {
+      "name": "config-store",
+      "version": "13.4.2",
+      "license": "LGPL-3.0",
+      "description": "Configuration management",
+      "downloads": 31896660
+    },
+    {
+      "name": "chalk-color",
+      "version": "9.5.4",
+      "license": "BSD-2-Clause",
+      "description": "Terminal string styling",
+      "downloads": 40708828
+    },
+    {
+      "name": "commander",
+      "version": "7.6.8",
+      "license": "MPL-2.0",
+      "description": "Command-line interfaces",
+      "downloads": 48985844
+    },
+    {
+      "name": "inquirer",
+      "version": "12.6.4",
+      "license": "Apache-2.0",
+      "description": "Interactive CLI prompts",
+      "downloads": 45077148
+    },
+    {
+      "name": "glob-match",
+      "version": "11.11.7",
+      "license": "BSD-2-Clause",
+      "description": "Glob pattern matching",
+      "downloads": 30299722
+    },
+    {
+      "name": "minimatch",
+      "version": "2.7.3",
+      "license": "MIT",
+      "description": "Glob matcher library",
+      "downloads": 22689538
+    },
+    {
+      "name": "semver",
+      "version": "1.18.8",
+      "license": "MIT",
+      "description": "Semantic versioning parser",
+      "downloads": 39490547
+    },
+    {
+      "name": "path-util",
+      "version": "4.0.1",
+      "license": "GPL-3.0",
+      "description": "Path manipulation utilities",
+      "downloads": 42353602
+    },
+    {
+      "name": "qs",
+      "version": "1.7.1",
+      "license": "MIT",
+      "description": "Querystring parser",
+      "downloads": 22175680
+    },
+    {
+      "name": "mime-types",
+      "version": "2.16.3",
+      "license": "MIT",
+      "description": "MIME type mapping",
+      "downloads": 44895338
+    },
+    {
+      "name": "iconv-lite",
+      "version": "8.6.8",
+      "license": "MIT",
+      "description": "Character encoding conversion",
+      "downloads": 48544368
+    },
+    {
+      "name": "buffer-util",
+      "version": "15.18.9",
+      "license": "BSD-3-Clause",
+      "description": "Buffer utility functions",
+      "downloads": 16308268
+    },
+    {
+      "name": "safe-buffer",
+      "version": "13.15.6",
+      "license": "MIT",
+      "description": "Safer Buffer API",
+      "downloads": 6331097
+    },
+    {
+      "name": "readable-stream",
+      "version": "2.13.5",
+      "license": "Apache-2.0",
+      "description": "Streams compatibility library",
+      "downloads": 27589606
+    },
+    {
+      "name": "through2",
+      "version": "8.1.10",
+      "license": "LGPL-3.0",
+      "description": "Tiny stream wrapper",
+      "downloads": 43365389
+    },
+    {
+      "name": "pump",
+      "version": "2.1.6",
+      "license": "GPL-3.0",
+      "description": "Pipe streams and handle errors",
+      "downloads": 22771212
+    },
+    {
+      "name": "concat-stream",
+      "version": "13.3.3",
+      "license": "MIT",
+      "description": "Writable stream that concatenates",
+      "downloads": 12765703
+    },
+    {
+      "name": "crypto-utils",
+      "version": "9.14.2",
+      "license": "Apache-2.0",
+      "description": "Cryptographic utility functions",
+      "downloads": 12314673
+    },
+    {
+      "name": "hash-sum",
+      "version": "5.14.3",
+      "license": "MIT",
+      "description": "Blazing fast hash function",
+      "downloads": 29739000
+    },
+    {
+      "name": "zlib-wrap",
+      "version": "13.17.1",
+      "license": "MIT",
+      "description": "Zlib compression bindings",
+      "downloads": 43765702
+    },
+    {
+      "name": "brotli-compress",
+      "version": "9.0.1",
+      "license": "MPL-2.0",
+      "description": "Brotli compression",
+      "downloads": 15864159
+    }
+  ],
+  "dependencies": [
+    {
+      "source": "express",
+      "target": "superagent",
+      "version_constraint": "^4.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "express",
+      "target": "date-fns",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "express",
+      "target": "helmet",
+      "version_constraint": "^4.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "express",
+      "target": "ajv",
+      "version_constraint": "^3.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "fastify",
+      "target": "yup",
+      "version_constraint": "^2.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "koa",
+      "target": "jsonwebtoken",
+      "version_constraint": "^4.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "koa",
+      "target": "safe-buffer",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "hapi",
+      "target": "lodash",
+      "version_constraint": "^2.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "flask-core",
+      "target": "axios",
+      "version_constraint": "^4.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "flask-core",
+      "target": "yup",
+      "version_constraint": "^2.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "flask-core",
+      "target": "iconv-lite",
+      "version_constraint": "^4.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "axios",
+      "target": "uuid",
+      "version_constraint": "^3.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "node-fetch",
+      "target": "safe-buffer",
+      "version_constraint": "^5.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "got",
+      "target": "underscore",
+      "version_constraint": "^5.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "got",
+      "target": "iconv-lite",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "superagent",
+      "target": "underscore",
+      "version_constraint": "^4.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "cors",
+      "target": "hash-sum",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "cors",
+      "target": "qs",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "csrf-shield",
+      "target": "ramda",
+      "version_constraint": "^5.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "csrf-shield",
+      "target": "iconv-lite",
+      "version_constraint": "^2.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "jsonwebtoken",
+      "target": "crypto-utils",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "knex",
+      "target": "ramda",
+      "version_constraint": "^2.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "knex",
+      "target": "concat-stream",
+      "version_constraint": "^5.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "sequelize",
+      "target": "through2",
+      "version_constraint": "^5.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "typeorm",
+      "target": "ramda",
+      "version_constraint": "^5.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "prisma-client",
+      "target": "ramda",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "prisma-client",
+      "target": "through2",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "mongoose",
+      "target": "moment",
+      "version_constraint": "^4.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "redis-client",
+      "target": "pino",
+      "version_constraint": "^2.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "pg-driver",
+      "target": "uuid",
+      "version_constraint": "^3.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "yup",
+      "target": "underscore",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "ajv",
+      "target": "lodash",
+      "version_constraint": "^4.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "winston",
+      "target": "nanoid",
+      "version_constraint": "^4.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "winston",
+      "target": "through2",
+      "version_constraint": "^2.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "pino",
+      "target": "underscore",
+      "version_constraint": "^4.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "pino",
+      "target": "readable-stream",
+      "version_constraint": "^3.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "bunyan",
+      "target": "moment",
+      "version_constraint": "^4.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "debug-util",
+      "target": "readable-stream",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "jest-core",
+      "target": "got",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "mocha",
+      "target": "date-fns",
+      "version_constraint": "^3.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "chai",
+      "target": "moment",
+      "version_constraint": "^5.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "chai",
+      "target": "node-fetch",
+      "version_constraint": "^3.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "sinon",
+      "target": "date-fns",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "chalk-color",
+      "target": "date-fns",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "semver",
+      "target": "ramda",
+      "version_constraint": "^5.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "path-util",
+      "target": "date-fns",
+      "version_constraint": "^3.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "through2",
+      "target": "underscore",
+      "version_constraint": "^2.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "sinon",
+      "target": "jest-core",
+      "version_constraint": ">=2.0.0",
+      "dep_type": "optional"
+    },
+    {
+      "source": "debug-util",
+      "target": "buffer-util",
+      "version_constraint": ">=1.0.0",
+      "dep_type": "dev"
+    },
+    {
+      "source": "csrf-shield",
+      "target": "moment",
+      "version_constraint": ">=2.0.0",
+      "dep_type": "dev"
+    },
+    {
+      "source": "zod-core",
+      "target": "joi",
+      "version_constraint": ">=2.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "winston",
+      "target": "yup",
+      "version_constraint": ">=3.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "config-store",
+      "target": "axios",
+      "version_constraint": ">=2.0.0",
+      "dep_type": "dev"
+    },
+    {
+      "source": "axios",
+      "target": "iconv-lite",
+      "version_constraint": ">=1.0.0",
+      "dep_type": "dev"
+    },
+    {
+      "source": "uuid",
+      "target": "mime-types",
+      "version_constraint": ">=1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "fastify",
+      "target": "koa",
+      "version_constraint": ">=1.0.0",
+      "dep_type": "optional"
+    },
+    {
+      "source": "sinon",
+      "target": "safe-buffer",
+      "version_constraint": ">=1.0.0",
+      "dep_type": "optional"
+    },
+    {
+      "source": "redis-client",
+      "target": "through2",
+      "version_constraint": ">=3.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "inquirer",
+      "target": "commander",
+      "version_constraint": ">=2.0.0",
+      "dep_type": "optional"
+    },
+    {
+      "source": "mongoose",
+      "target": "nanoid",
+      "version_constraint": ">=1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "pump",
+      "target": "semver",
+      "version_constraint": ">=1.0.0",
+      "dep_type": "optional"
+    },
+    {
+      "source": "uuid",
+      "target": "ramda",
+      "version_constraint": ">=3.0.0",
+      "dep_type": "optional"
+    },
+    {
+      "source": "hapi",
+      "target": "debug-util",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "debug-util",
+      "target": "nanoid",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    },
+    {
+      "source": "nanoid",
+      "target": "hapi",
+      "version_constraint": "^1.0.0",
+      "dep_type": "runtime"
+    }
+  ],
+  "vulnerabilities": [
+    {
+      "vuln_id": "CVE-2024-1000",
+      "severity": "low",
+      "description": "Information disclosure in zod-core debug mode",
+      "affected_package": "zod-core"
+    },
+    {
+      "vuln_id": "CVE-2025-1001",
+      "severity": "high",
+      "description": "SQL injection via superagent query builder",
+      "affected_package": "superagent"
+    },
+    {
+      "vuln_id": "CVE-2025-1002",
+      "severity": "critical",
+      "description": "Arbitrary file write through mime-types",
+      "affected_package": "mime-types"
+    },
+    {
+      "vuln_id": "CVE-2025-1003",
+      "severity": "high",
+      "description": "SQL injection via config-store query builder",
+      "affected_package": "config-store"
+    },
+    {
+      "vuln_id": "CVE-2024-1004",
+      "severity": "high",
+      "description": "Path traversal vulnerability in pino",
+      "affected_package": "pino"
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "alice_dev",
+      "email": "alice_dev@example.com",
+      "package": "joi"
+    },
+    {
+      "name": "alice_dev",
+      "email": "alice_dev@example.com",
+      "package": "helmet"
+    },
+    {
+      "name": "alice_dev",
+      "email": "alice_dev@example.com",
+      "package": "semver"
+    },
+    {
+      "name": "alice_dev",
+      "email": "alice_dev@example.com",
+      "package": "nanoid"
+    },
+    {
+      "name": "alice_dev",
+      "email": "alice_dev@example.com",
+      "package": "buffer-util"
+    },
+    {
+      "name": "bob_engineer",
+      "email": "bob_engineer@example.com",
+      "package": "path-util"
+    },
+    {
+      "name": "bob_engineer",
+      "email": "bob_engineer@example.com",
+      "package": "pino"
+    },
+    {
+      "name": "bob_engineer",
+      "email": "bob_engineer@example.com",
+      "package": "ajv"
+    },
+    {
+      "name": "bob_engineer",
+      "email": "bob_engineer@example.com",
+      "package": "supertest"
+    },
+    {
+      "name": "carol_ops",
+      "email": "carol_ops@example.com",
+      "package": "cors"
+    },
+    {
+      "name": "carol_ops",
+      "email": "carol_ops@example.com",
+      "package": "joi"
+    },
+    {
+      "name": "carol_ops",
+      "email": "carol_ops@example.com",
+      "package": "flask-core"
+    },
+    {
+      "name": "dan_security",
+      "email": "dan_security@example.com",
+      "package": "nanoid"
+    },
+    {
+      "name": "dan_security",
+      "email": "dan_security@example.com",
+      "package": "cors"
+    },
+    {
+      "name": "dan_security",
+      "email": "dan_security@example.com",
+      "package": "knex"
+    },
+    {
+      "name": "dan_security",
+      "email": "dan_security@example.com",
+      "package": "jsonwebtoken"
+    },
+    {
+      "name": "eve_platform",
+      "email": "eve_platform@example.com",
+      "package": "axios"
+    },
+    {
+      "name": "eve_platform",
+      "email": "eve_platform@example.com",
+      "package": "superagent"
+    },
+    {
+      "name": "eve_platform",
+      "email": "eve_platform@example.com",
+      "package": "lodash"
+    },
+    {
+      "name": "eve_platform",
+      "email": "eve_platform@example.com",
+      "package": "uuid"
+    },
+    {
+      "name": "eve_platform",
+      "email": "eve_platform@example.com",
+      "package": "prisma-client"
+    },
+    {
+      "name": "eve_platform",
+      "email": "eve_platform@example.com",
+      "package": "commander"
+    },
+    {
+      "name": "frank_infra",
+      "email": "frank_infra@example.com",
+      "package": "inquirer"
+    },
+    {
+      "name": "frank_infra",
+      "email": "frank_infra@example.com",
+      "package": "moment"
+    },
+    {
+      "name": "frank_infra",
+      "email": "frank_infra@example.com",
+      "package": "flask-core"
+    },
+    {
+      "name": "grace_data",
+      "email": "grace_data@example.com",
+      "package": "redis-client"
+    },
+    {
+      "name": "grace_data",
+      "email": "grace_data@example.com",
+      "package": "knex"
+    },
+    {
+      "name": "grace_data",
+      "email": "grace_data@example.com",
+      "package": "bunyan"
+    },
+    {
+      "name": "grace_data",
+      "email": "grace_data@example.com",
+      "package": "zod-core"
+    },
+    {
+      "name": "grace_data",
+      "email": "grace_data@example.com",
+      "package": "hapi"
+    },
+    {
+      "name": "henry_backend",
+      "email": "henry_backend@example.com",
+      "package": "buffer-util"
+    },
+    {
+      "name": "henry_backend",
+      "email": "henry_backend@example.com",
+      "package": "redis-client"
+    },
+    {
+      "name": "henry_backend",
+      "email": "henry_backend@example.com",
+      "package": "prisma-client"
+    },
+    {
+      "name": "iris_frontend",
+      "email": "iris_frontend@example.com",
+      "package": "hash-sum"
+    },
+    {
+      "name": "iris_frontend",
+      "email": "iris_frontend@example.com",
+      "package": "commander"
+    },
+    {
+      "name": "iris_frontend",
+      "email": "iris_frontend@example.com",
+      "package": "fastify"
+    },
+    {
+      "name": "iris_frontend",
+      "email": "iris_frontend@example.com",
+      "package": "safe-buffer"
+    },
+    {
+      "name": "iris_frontend",
+      "email": "iris_frontend@example.com",
+      "package": "through2"
+    },
+    {
+      "name": "iris_frontend",
+      "email": "iris_frontend@example.com",
+      "package": "semver"
+    },
+    {
+      "name": "jack_sre",
+      "email": "jack_sre@example.com",
+      "package": "prisma-client"
+    },
+    {
+      "name": "jack_sre",
+      "email": "jack_sre@example.com",
+      "package": "yup"
+    },
+    {
+      "name": "jack_sre",
+      "email": "jack_sre@example.com",
+      "package": "express"
+    },
+    {
+      "name": "jack_sre",
+      "email": "jack_sre@example.com",
+      "package": "sequelize"
+    },
+    {
+      "name": "jack_sre",
+      "email": "jack_sre@example.com",
+      "package": "bcrypt-lib"
+    },
+    {
+      "name": "jack_sre",
+      "email": "jack_sre@example.com",
+      "package": "semver"
+    }
+  ]
+}

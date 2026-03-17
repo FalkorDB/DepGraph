@@ -26,21 +26,17 @@ A relational database would require recursive CTEs, multiple self-joins, and sig
 ### With Docker Compose (recommended)
 
 ```bash
-# Start FalkorDB + DepGraph API
+# Start FalkorDB + DepGraph (API + React UI)
 docker compose up -d
 
 # Seed with sample ecosystem data (80 packages, dependencies, vulnerabilities)
 curl -X POST "http://localhost:8000/seed?num_packages=80"
 
-# Analyze blast radius of a package
-curl "http://localhost:8000/analysis/blast-radius/lodash" | python -m json.tool
-
-# Find circular dependencies
-curl "http://localhost:8000/analysis/cycles" | python -m json.tool
-
-# Find single points of failure
-curl "http://localhost:8000/analysis/centrality" | python -m json.tool
+# Open the interactive dashboard
+open http://localhost:8000
 ```
+
+The React dashboard provides interactive graph visualizations for all analyses — blast radius, cycles, centrality, and license checks — powered by `@falkordb/canvas`.
 
 ### With CLI (local development)
 
@@ -187,31 +183,28 @@ RETURN dep.name, dep.license, length(path) AS depth, [n IN nodes(path) | n.name]
 ## Architecture
 
 ```
-┌──────────────────────────────────────────────────┐
-│                   Client Layer                    │
-│  ┌────────────┐              ┌────────────────┐  │
-│  │  CLI (Click)│             │ REST API        │  │
-│  │  depgraph   │             │ (FastAPI)       │  │
-│  │  blast-rad  │             │ /analysis/*     │  │
-│  │  cycles     │             │ /packages/*     │  │
-│  └──────┬─────┘              └───────┬────────┘  │
-│         │                            │            │
-│  ┌──────┴────────────────────────────┴────────┐  │
-│  │           Analysis Engine                   │  │
-│  │  blast_radius · cycles · centrality         │  │
-│  │  license_check · dependency_depth           │  │
-│  └──────────────────┬─────────────────────────┘  │
-│                     │                             │
-│  ┌──────────────────┴─────────────────────────┐  │
-│  │      Graph Layer (Parameterized Cypher)     │  │
-│  │  queries.py · schema.py · engine.py         │  │
-│  └──────────────────┬─────────────────────────┘  │
-│                     │                             │
-│  ┌──────────────────┴─────────────────────────┐  │
-│  │      Data Ingestion                         │  │
-│  │  seed.py · parsers.py (req.txt, pkg.json)   │  │
-│  └────────────────────────────────────────────┘  │
-└──────────────────────┬───────────────────────────┘
+┌──────────────────────────────────────────────────────┐
+│                   Client Layer                        │
+│  ┌──────────────┐  ┌──────────┐  ┌───────────────┐  │
+│  │  React UI     │  │ CLI      │  │ REST API      │  │
+│  │  @falkordb/   │  │ (Click)  │  │ (FastAPI)     │  │
+│  │  canvas       │  │          │  │ /analysis/*   │  │
+│  └──────┬───────┘  └────┬─────┘  └──────┬────────┘  │
+│         │               │               │            │
+│  ┌──────┴───────────────┴───────────────┴────────┐   │
+│  │           Analysis Engine                      │   │
+│  │  blast_radius · cycles · centrality            │   │
+│  │  license_check · dependency_depth              │   │
+│  └──────────────────┬────────────────────────────┘   │
+│                     │                                 │
+│  ┌──────────────────┴────────────────────────────┐   │
+│  │      Graph Layer (Parameterized Cypher)        │   │
+│  └──────────────────┬────────────────────────────┘   │
+│                     │                                 │
+│  ┌──────────────────┴────────────────────────────┐   │
+│  │      Data Ingestion (seed, req.txt, pkg.json)  │   │
+│  └────────────────────────────────────────────────┘  │
+└──────────────────────┬───────────────────────────────┘
                        │
               ┌────────┴────────┐
               │    FalkorDB     │
@@ -235,10 +228,40 @@ RETURN dep.name, dep.license, length(path) AS depth, [n IN nodes(path) | n.name]
 | `GET` | `/analysis/centrality` | Single points of failure |
 | `GET` | `/analysis/licenses/{name}` | License propagation check |
 | `GET` | `/analysis/depth/{name}` | Dependency tree depth |
+| `GET` | `/graph/data` | Full graph data for visualization |
+| `GET` | `/graph/blast-radius/{name}` | Blast radius subgraph for visualization |
+| `GET` | `/graph/cycles` | Cycle subgraph for visualization |
 | `POST` | `/seed` | Seed graph with sample data |
 
 Interactive API docs available at `http://localhost:8000/docs` when running.
 
+---
+
+## Frontend (React + @falkordb/canvas)
+
+The interactive dashboard is built with **React**, **TypeScript**, and **@falkordb/canvas** for graph visualization.
+
+### Views
+
+| View | Description |
+|------|-------------|
+| **Dashboard** | Overview stats + full dependency graph |
+| **Blast Radius** | Select a package, see its blast radius as a graph — affected packages highlighted by depth |
+| **Cycles** | Circular dependency detection with cycle visualization |
+| **Centrality** | Top packages by dependent count (single points of failure) |
+| **Licenses** | License propagation analysis with copyleft detection |
+
+### Frontend Development
+
+```bash
+cd frontend
+npm install
+npm run dev       # Vite dev server on :5173, proxies /api to :8000
+npm run build     # Production build to frontend/dist/
+npm run lint      # TypeScript type check
+```
+
+In production, the built frontend is served as static files from FastAPI (no separate web server needed).
 ---
 
 ## Configuration
