@@ -200,6 +200,15 @@ dev = [
     { name = "ruff" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "pytest-cov" },
+    { name = "respx" },
+    { name = "ruff" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "click", specifier = ">=8.1.0,<9.0.0" },
@@ -217,6 +226,15 @@ requires-dist = [
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.34.0,<1.0.0" },
 ]
 provides-extras = ["dev"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.3.0,<9.0.0" },
+    { name = "pytest-asyncio", specifier = ">=0.25.0,<1.0.0" },
+    { name = "pytest-cov", specifier = ">=6.0.0,<7.0.0" },
+    { name = "respx", specifier = ">=0.22.0,<1.0.0" },
+    { name = "ruff", specifier = ">=0.9.0,<1.0.0" },
+]
 
 [[package]]
 name = "falkordb"

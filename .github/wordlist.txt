@@ -65,3 +65,5 @@ toml
 txt
 hatchling
 depgraph
+CTEs
+json
