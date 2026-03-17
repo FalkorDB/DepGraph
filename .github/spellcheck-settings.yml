@@ -24,5 +24,4 @@ matrix:
       - img
       - table
   sources:
-  - '*.md'
-  - 'docs/*.md'
+  - '**/*.md'

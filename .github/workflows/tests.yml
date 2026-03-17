@@ -14,12 +14,12 @@ permissions:
   contents: read
 
 jobs:
-  unit-tests:
+  test:
     runs-on: ubuntu-latest
 
     services:
       falkordb:
-        image: falkordb/falkordb:latest
+        image: falkordb/falkordb:v4.16.6
         ports:
           - 6379:6379
         options: >-
@@ -39,10 +39,16 @@ jobs:
     - name: Install uv
       uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5.4.2
       with:
-        version: "latest"
+        version: "0.7.12"
 
     - name: Install dependencies
       run: uv sync
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 'lts/*'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
 
     - name: Install frontend dependencies
       working-directory: frontend
