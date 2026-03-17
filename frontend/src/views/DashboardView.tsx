@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import GraphCanvas from '../components/GraphCanvas';
 import StatCard from '../components/StatCard';
 import { api } from '../api';
-import type { GraphStats } from '../types';
-import type { CanvasData } from '../canvas-types';
+import type { GraphStats, PackageInfo } from '../types';
+import type { CanvasData, CanvasNode } from '../canvas-types';
 
 export default function DashboardView() {
   const [stats, setStats] = useState<GraphStats | null>(null);
@@ -12,6 +12,8 @@ export default function DashboardView() {
   const [seeding, setSeeding] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [nodeDetail, setNodeDetail] = useState<PackageInfo | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -40,6 +42,34 @@ export default function DashboardView() {
       setSeeding(false);
     }
   };
+
+  const handleNodeClick = useCallback(async (node: CanvasNode) => {
+    const name = node.data?.name as string || null;
+    setSelectedNode(name);
+    if (name && node.labels?.includes('Package')) {
+      try {
+        const pkg = await api.getPackage(name);
+        setNodeDetail(pkg);
+      } catch {
+        setNodeDetail(null);
+      }
+    } else {
+      setNodeDetail(null);
+    }
+  }, []);
+
+  // Filter graph data by search term (highlight matching nodes)
+  const filteredData = graphData && searchTerm
+    ? {
+        ...graphData,
+        nodes: graphData.nodes.map(n => ({
+          ...n,
+          color: (n.data?.name as string || '').toLowerCase().includes(searchTerm.toLowerCase())
+            ? '#FFD93D'
+            : n.color,
+        })),
+      }
+    : graphData;
 
   return (
     <div className="view">
@@ -73,14 +103,40 @@ export default function DashboardView() {
           Full Dependency Graph
           {selectedNode && <span className="selected-badge">Selected: {selectedNode}</span>}
         </h3>
+
+        <div className="graph-toolbar">
+          <input
+            type="text"
+            placeholder="🔍 Search nodes..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <div className="graph-legend">
+            <span className="legend-item"><span className="legend-dot" style={{ background: '#4ECDC4' }} /> Package</span>
+            <span className="legend-item"><span className="legend-dot" style={{ background: '#FF6B6B' }} /> Vulnerability</span>
+            <span className="legend-item"><span className="legend-dot" style={{ background: '#45B7D1' }} /> Maintainer</span>
+            {searchTerm && <span className="legend-item"><span className="legend-dot" style={{ background: '#FFD93D' }} /> Match</span>}
+          </div>
+        </div>
+
         {loading ? (
           <div className="loading-placeholder">Loading graph...</div>
         ) : (
           <GraphCanvas
-            data={graphData}
+            data={filteredData}
             selectedNode={selectedNode}
-            onNodeClick={(node) => setSelectedNode(node.data?.name as string || null)}
+            onNodeClick={handleNodeClick}
           />
+        )}
+
+        {nodeDetail && (
+          <div className="node-detail-panel">
+            <h4>📦 {nodeDetail.name}</h4>
+            <div className="detail-row"><span className="detail-label">Version</span><span>{nodeDetail.version}</span></div>
+            <div className="detail-row"><span className="detail-label">License</span><span>{nodeDetail.license}</span></div>
+            <div className="detail-row"><span className="detail-label">Downloads</span><span>{(nodeDetail.downloads ?? 0).toLocaleString()}</span></div>
+            <div className="detail-row"><span className="detail-label">Description</span><span>{nodeDetail.description}</span></div>
+          </div>
         )}
       </div>
     </div>

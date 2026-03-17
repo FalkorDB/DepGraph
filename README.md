@@ -56,6 +56,21 @@ depgraph centrality
 depgraph licenses express
 depgraph depth express
 depgraph stats
+
+# Import real packages from npm/PyPI
+depgraph ingest-npm express --depth 2
+depgraph ingest-pypi requests --depth 2
+
+# Scan for vulnerabilities (OSV.dev)
+depgraph scan-vulns                         # scan all packages
+depgraph scan-vulns -p express -e npm       # scan one package
+
+# SBOM export
+depgraph export-sbom --format cyclonedx -o sbom.json
+depgraph export-sbom --format spdx -o sbom-spdx.json
+
+# SBOM import
+depgraph import-sbom sbom.json
 ```
 
 ---
@@ -228,6 +243,16 @@ RETURN dep.name, dep.license, length(path) AS depth, [n IN nodes(path) | n.name]
 | `GET` | `/analysis/centrality` | Single points of failure |
 | `GET` | `/analysis/licenses/{name}` | License propagation check |
 | `GET` | `/analysis/depth/{name}` | Dependency tree depth |
+| `POST` | `/ingest/npm/{name}` | Ingest real npm package + transitive deps |
+| `POST` | `/ingest/pypi/{name}` | Ingest real PyPI package + transitive deps |
+| `GET` | `/sbom/cyclonedx` | Export CycloneDX 1.5 SBOM |
+| `GET` | `/sbom/spdx` | Export SPDX 2.3 SBOM |
+| `POST` | `/sbom/import` | Import CycloneDX/SPDX SBOM |
+| `POST` | `/vulnerabilities/scan` | Scan all packages via OSV.dev |
+| `GET` | `/vulnerabilities/scan/{name}` | Scan single package via OSV.dev |
+| `POST` | `/webhooks/npm` | npm registry webhook endpoint |
+| `POST` | `/webhooks/pypi` | PyPI webhook endpoint |
+| `POST` | `/webhooks/generic` | Generic package update webhook |
 | `GET` | `/graph/data` | Full graph data for visualization |
 | `GET` | `/graph/blast-radius/{name}` | Blast radius subgraph for visualization |
 | `GET` | `/graph/cycles` | Cycle subgraph for visualization |
@@ -245,11 +270,14 @@ The interactive dashboard is built with **React**, **TypeScript**, and **@falkor
 
 | View | Description |
 |------|-------------|
-| **Dashboard** | Overview stats + full dependency graph |
+| **Dashboard** | Overview stats + full dependency graph with search/filter and node details |
 | **Blast Radius** | Select a package, see its blast radius as a graph — affected packages highlighted by depth |
 | **Cycles** | Circular dependency detection with cycle visualization |
 | **Centrality** | Top packages by dependent count (single points of failure) |
 | **Licenses** | License propagation analysis with copyleft detection |
+| **Import** | Ingest real packages from npm/PyPI registries or import CycloneDX/SPDX SBOMs |
+| **Vulnerabilities** | Scan packages against OSV.dev with severity breakdown |
+| **SBOM Export** | Download the dependency graph as CycloneDX 1.5 or SPDX 2.3 JSON |
 
 ### Frontend Development
 
@@ -262,6 +290,7 @@ npm run lint      # TypeScript type check
 ```
 
 In production, the built frontend is served as static files from FastAPI (no separate web server needed).
+
 ---
 
 ## Configuration
@@ -334,7 +363,7 @@ depgraph ingest package.json
 
 ## Testing
 
-- **Unit tests** (47): Test all analysis logic with mock FalkorDB graph
+- **Unit tests** (106+): Test all analysis logic with mock FalkorDB graph
 - **Integration tests** (5): Test full pipeline against a real FalkorDB instance
 
 ```bash

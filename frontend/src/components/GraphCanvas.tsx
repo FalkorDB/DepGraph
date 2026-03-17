@@ -66,8 +66,8 @@ export default function GraphCanvas({
     const canvas = canvasRef.current;
     if (!canvas || !data) return;
     canvas.setData(data);
-    // Auto-fit after layout settles
-    setTimeout(() => canvas.zoomToFit(1.2), 800);
+    const timer = window.setTimeout(() => canvas.zoomToFit(1.2), 800);
+    return () => window.clearTimeout(timer);
   }, [data]);
 
   return (

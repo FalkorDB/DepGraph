@@ -5,6 +5,9 @@ import BlastRadiusView from './views/BlastRadiusView';
 import CyclesView from './views/CyclesView';
 import CentralityView from './views/CentralityView';
 import LicensesView from './views/LicensesView';
+import ImportView from './views/ImportView';
+import VulnerabilitiesView from './views/VulnerabilitiesView';
+import ExportView from './views/ExportView';
 
 export default function App() {
   return (
@@ -18,6 +21,9 @@ export default function App() {
             <Route path="/cycles" element={<CyclesView />} />
             <Route path="/centrality" element={<CentralityView />} />
             <Route path="/licenses" element={<LicensesView />} />
+            <Route path="/import" element={<ImportView />} />
+            <Route path="/vulnerabilities" element={<VulnerabilitiesView />} />
+            <Route path="/export" element={<ExportView />} />
           </Routes>
         </main>
       </div>

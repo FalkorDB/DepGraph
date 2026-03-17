@@ -71,6 +71,25 @@ export interface HealthResponse {
   relationship_count: number;
 }
 
+export interface IngestResult {
+  packages: number;
+  dependencies: number;
+  errors?: number;
+}
+
+export interface VulnEntry {
+  id: string;
+  severity: string;
+  package: string;
+  summary: string;
+}
+
+export interface VulnScanResult {
+  packages_scanned: number;
+  vulnerabilities_found: number;
+  vulnerabilities: VulnEntry[];
+}
+
 import type { CanvasNode, CanvasLink } from './canvas-types';
 
 export interface GraphData {
