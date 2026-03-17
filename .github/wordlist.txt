@@ -67,3 +67,11 @@ hatchling
 depgraph
 CTEs
 json
+ESLint
+eslint
+HMR
+Oxc
+vitejs
+SWC
+swc
+dom
