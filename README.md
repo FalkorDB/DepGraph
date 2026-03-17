@@ -290,6 +290,7 @@ npm run lint      # TypeScript type check
 ```
 
 In production, the built frontend is served as static files from FastAPI (no separate web server needed).
+
 ---
 
 ## Configuration

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import PackageSelector from '../components/PackageSelector';
 import { api } from '../api';
 import type { LicenseReport } from '../types';
@@ -15,6 +15,7 @@ export default function LicensesView() {
   const [selected, setSelected] = useState('');
   const [result, setResult] = useState<LicenseReport | null>(null);
   const [loading, setLoading] = useState(false);
+  const analyzeReqId = useRef(0);
 
   useEffect(() => {
     api.packages(500).then((pkgs) => setPackages(pkgs.map((p) => p.name)));
@@ -22,14 +23,18 @@ export default function LicensesView() {
 
   const analyze = useCallback(async (name: string) => {
     if (!name) return;
+    const reqId = ++analyzeReqId.current;
     setSelected(name);
     setLoading(true);
     try {
-      setResult(await api.licenses(name));
+      const report = await api.licenses(name);
+      if (reqId !== analyzeReqId.current) return;
+      setResult(report);
     } catch {
+      if (reqId !== analyzeReqId.current) return;
       setResult(null);
     } finally {
-      setLoading(false);
+      if (reqId === analyzeReqId.current) setLoading(false);
     }
   }, []);
 
@@ -74,8 +79,8 @@ export default function LicensesView() {
                   <tr><th>Package</th><th>License</th><th>Risk</th><th>Via</th></tr>
                 </thead>
                 <tbody>
-                  {result.issues.map((issue) => (
-                    <tr key={issue.package}>
+                  {result.issues.map((issue, i) => (
+                    <tr key={`${issue.package}-${issue.license}-${i}`}>
                       <td className="pkg-name">{issue.package}</td>
                       <td><code>{issue.license}</code></td>
                       <td>

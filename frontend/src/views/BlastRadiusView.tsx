@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import GraphCanvas from '../components/GraphCanvas';
 import PackageSelector from '../components/PackageSelector';
 import { api } from '../api';
@@ -11,6 +11,7 @@ export default function BlastRadiusView() {
   const [result, setResult] = useState<BlastRadiusResult | null>(null);
   const [graphData, setGraphData] = useState<CanvasData | null>(null);
   const [loading, setLoading] = useState(false);
+  const analyzeReqId = useRef(0);
 
   useEffect(() => {
     api.packages(500).then((pkgs) => setPackages(pkgs.map((p) => p.name)));
@@ -18,6 +19,7 @@ export default function BlastRadiusView() {
 
   const analyze = useCallback(async (name: string) => {
     if (!name) return;
+    const reqId = ++analyzeReqId.current;
     setSelected(name);
     setLoading(true);
     try {
@@ -25,13 +27,15 @@ export default function BlastRadiusView() {
         api.blastRadius(name),
         api.graphBlastRadius(name),
       ]);
+      if (reqId !== analyzeReqId.current) return;
       setResult(br);
       setGraphData(gd as CanvasData);
     } catch {
+      if (reqId !== analyzeReqId.current) return;
       setResult(null);
       setGraphData(null);
     } finally {
-      setLoading(false);
+      if (reqId === analyzeReqId.current) setLoading(false);
     }
   }, []);
 

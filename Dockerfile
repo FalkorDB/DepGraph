@@ -23,10 +23,15 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
+RUN useradd --create-home --shell /bin/bash appuser
+
 COPY --from=backend /usr/local/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages/
 COPY --from=backend /usr/local/bin/ /usr/local/bin/
 COPY --from=backend /app/ /app/
 COPY --from=frontend-build /frontend/dist/ /app/static/
+
+RUN chown -R appuser:appuser /app
+USER appuser
 
 EXPOSE 8000
 

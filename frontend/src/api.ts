@@ -44,7 +44,7 @@ export const api = {
   health: () => fetchJSON<HealthResponse>('/health'),
   stats: () => fetchJSON<GraphStats>('/stats'),
   packages: (limit = 200) => fetchJSON<PackageInfo[]>(`/packages?limit=${limit}`),
-  searchPackages: (q: string) => fetchJSON<PackageInfo[]>(`/packages/search?q=${q}`),
+  searchPackages: (q: string) => fetchJSON<PackageInfo[]>(`/packages/search?q=${encodeURIComponent(q)}`),
   getPackage: (name: string) => fetchJSON<PackageInfo>(`/packages/${encodeURIComponent(name)}`),
   blastRadius: (name: string) => fetchJSON<BlastRadiusResult>(`/analysis/blast-radius/${encodeURIComponent(name)}`),
   cycles: (limit = 20) => fetchJSON<CycleResult>(`/analysis/cycles?limit=${limit}`),

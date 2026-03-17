@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
@@ -61,12 +62,14 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+_cors_origins = os.getenv("CORS_ORIGINS", "").split(",") if os.getenv("CORS_ORIGINS") else []
+if _cors_origins:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=_cors_origins,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 
 def _get_engine() -> AnalysisEngine:
@@ -508,7 +511,10 @@ if _STATIC_DIR.is_dir():
     @app.get("/{full_path:path}")
     def serve_spa(full_path: str) -> FileResponse:
         """Serve the React SPA for any unmatched routes."""
-        file_path = _STATIC_DIR / full_path
+        file_path = (_STATIC_DIR / full_path).resolve()
+        # Block path traversal — resolved path must stay within _STATIC_DIR
+        if not str(file_path).startswith(str(_STATIC_DIR)):
+            return FileResponse(_STATIC_DIR / "index.html")
         if file_path.is_file():
             return FileResponse(file_path)
         return FileResponse(_STATIC_DIR / "index.html")
