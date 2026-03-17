@@ -1,4 +1,4 @@
-.PHONY: install dev test lint format run seed clean docker-up docker-down
+.PHONY: install dev test lint format run seed clean docker-up docker-down frontend
 
 install:
 	pip install -e .
@@ -18,6 +18,7 @@ test-all:
 lint:
 	ruff check src/ tests/
 	ruff format --check src/ tests/
+	cd frontend && npx tsc --noEmit
 
 format:
 	ruff check --fix src/ tests/
@@ -29,9 +30,13 @@ run:
 seed:
 	depgraph seed --packages 80
 
+frontend:
+	cd frontend && npm install && npm run build
+
 clean:
 	rm -rf __pycache__ .pytest_cache .ruff_cache .coverage htmlcov dist build *.egg-info
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+	rm -rf frontend/dist
 
 docker-up:
 	docker compose up -d
