@@ -1,0 +1,94 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "depgraph"
+version = "0.1.0"
+description = "Package Dependency Impact Analyzer powered by FalkorDB"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+authors = [{ name = "DepGraph Contributors" }]
+keywords = ["dependency", "graph", "security", "supply-chain", "falkordb"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = [
+    "falkordb>=1.1.1,<2.0.0",
+    "fastapi>=0.115.0,<1.0.0",
+    "uvicorn[standard]>=0.34.0,<1.0.0",
+    "click>=8.1.0,<9.0.0",
+    "pydantic>=2.10.0,<3.0.0",
+    "rich>=13.9.0,<14.0.0",
+    "structlog>=24.4.0,<26.0.0",
+    "httpx>=0.28.0,<1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0,<9.0.0",
+    "pytest-asyncio>=0.25.0,<1.0.0",
+    "pytest-cov>=6.0.0,<7.0.0",
+    "ruff>=0.9.0,<1.0.0",
+    "respx>=0.22.0,<1.0.0",
+]
+
+[project.scripts]
+depgraph = "depgraph.cli:cli"
+
+[project.urls]
+Homepage = "https://github.com/depgraph/depgraph"
+Repository = "https://github.com/depgraph/depgraph"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/depgraph"]
+
+[tool.ruff]
+target-version = "py311"
+src = ["src", "tests"]
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "B",    # bugbear
+    "SIM",  # simplify
+    "T20",  # print statements
+    "RUF",  # ruff-specific
+]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["depgraph"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+markers = [
+    "integration: marks tests requiring a running FalkorDB instance",
+]
+
+[tool.coverage.run]
+source = ["depgraph"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "if __name__ ==",
+]
