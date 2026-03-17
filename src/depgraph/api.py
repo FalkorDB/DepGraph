@@ -519,7 +519,9 @@ def graph_cycles() -> dict[str, Any]:
 
 # --- Static files for frontend SPA ---
 
-_STATIC_DIR = Path(__file__).resolve().parent.parent.parent / "static"
+_STATIC_DIR = Path(
+    os.getenv("STATIC_DIR", Path(__file__).resolve().parent.parent.parent / "static")
+)
 
 if _STATIC_DIR.is_dir():
     app.mount("/assets", StaticFiles(directory=_STATIC_DIR / "assets"), name="assets")
