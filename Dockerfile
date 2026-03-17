@@ -33,6 +33,8 @@ COPY --from=frontend-build /frontend/dist/ /app/static/
 RUN chown -R appuser:appuser /app
 USER appuser
 
+ENV STATIC_DIR=/app/static
+
 EXPOSE 8000
 
 CMD ["uvicorn", "depgraph.api:app", "--host", "0.0.0.0", "--port", "8000"]
