@@ -2,7 +2,7 @@
 
 **DepGraph** analyzes package dependency graphs to answer critical supply chain security questions: *"What's the blast radius if this package has a vulnerability? Are there circular dependencies? Which packages are single points of failure? Do I have copyleft license contamination?"* — all powered by graph traversals in [FalkorDB](https://www.falkordb.com/).
 
-[![CI](https://github.com/depgraph/depgraph/actions/workflows/ci.yml/badge.svg)](https://github.com/depgraph/depgraph/actions)
+[![CI](https://github.com/FalkorDB/depgraph/actions/workflows/ci.yml/badge.svg)](https://github.com/FalkorDB/depgraph/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
