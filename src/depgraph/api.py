@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import structlog
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -205,6 +205,142 @@ def seed_data(
 
     save_ecosystem(data, save_path)
     return ingest_ecosystem(_db.graph, data)
+
+
+# --- Registry Ingestion ---
+
+
+@app.post("/ingest/npm/{package_name}", response_model=dict[str, int])
+def ingest_npm(
+    package_name: str,
+    max_depth: int = Query(default=3, ge=1, le=5),
+    include_dev: bool = Query(default=False),
+) -> dict[str, int]:
+    """Fetch a real npm package and its transitive dependencies from the registry."""
+    if _db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    from depgraph.ingest.registry import ingest_npm_package
+
+    return ingest_npm_package(_db.graph, package_name, max_depth=max_depth, include_dev=include_dev)
+
+
+@app.post("/ingest/pypi/{package_name}", response_model=dict[str, int])
+def ingest_pypi(
+    package_name: str,
+    max_depth: int = Query(default=3, ge=1, le=5),
+    include_extras: bool = Query(default=False),
+) -> dict[str, int]:
+    """Fetch a real PyPI package and its transitive dependencies from the registry."""
+    if _db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    from depgraph.ingest.registry import ingest_pypi_package
+
+    return ingest_pypi_package(
+        _db.graph, package_name, max_depth=max_depth, include_extras=include_extras
+    )
+
+
+# --- SBOM Export/Import ---
+
+
+@app.get("/sbom/cyclonedx")
+def export_cyclonedx() -> dict[str, Any]:
+    """Export the dependency graph as a CycloneDX 1.5 SBOM."""
+    if _db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    from depgraph.sbom import export_cyclonedx as _export_cdx
+
+    return _export_cdx(_db.graph)
+
+
+@app.get("/sbom/spdx")
+def export_spdx() -> dict[str, Any]:
+    """Export the dependency graph as an SPDX 2.3 SBOM."""
+    if _db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    from depgraph.sbom import export_spdx as _export_spdx
+
+    return _export_spdx(_db.graph)
+
+
+@app.post("/sbom/import", response_model=dict[str, int])
+async def import_sbom(request: Request) -> dict[str, int]:
+    """Import a CycloneDX or SPDX SBOM (JSON) to populate the graph."""
+    if _db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    body = await request.json()
+    from depgraph.sbom import import_sbom as _import_sbom
+
+    return _import_sbom(_db.graph, body)
+
+
+# --- Vulnerability Scanning (OSV.dev) ---
+
+
+@app.post("/vulnerabilities/scan", response_model=dict[str, Any])
+def scan_all_vulnerabilities() -> dict[str, Any]:
+    """Scan all packages in the graph against the OSV.dev vulnerability database."""
+    if _db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    from depgraph.ingest.osv import scan_graph_packages
+
+    return scan_graph_packages(_db.graph)
+
+
+@app.get("/vulnerabilities/scan/{package_name}", response_model=dict[str, Any])
+def scan_package_vulnerabilities(
+    package_name: str,
+    ecosystem: str = Query(default="npm", pattern="^(npm|PyPI)$"),
+) -> dict[str, Any]:
+    """Scan a single package against OSV.dev and ingest any vulnerabilities."""
+    if _db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    engine = _get_engine()
+    pkg = engine.get_package(package_name)
+    if pkg is None:
+        raise HTTPException(status_code=404, detail=f"Package '{package_name}' not found")
+    from depgraph.ingest.osv import scan_and_ingest_package
+
+    return scan_and_ingest_package(_db.graph, package_name, pkg.version, ecosystem)
+
+
+# --- Webhooks for Incremental Updates ---
+
+
+@app.post("/webhooks/npm")
+async def webhook_npm(request: Request) -> dict[str, str]:
+    """Receive npm registry webhook events for incremental graph updates."""
+    if _db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    body = await request.json()
+    from depgraph.webhooks import handle_npm_webhook
+
+    handle_npm_webhook(_db.graph, body)
+    return {"status": "processed"}
+
+
+@app.post("/webhooks/pypi")
+async def webhook_pypi(request: Request) -> dict[str, str]:
+    """Receive PyPI webhook events for incremental graph updates."""
+    if _db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    body = await request.json()
+    from depgraph.webhooks import handle_pypi_webhook
+
+    handle_pypi_webhook(_db.graph, body)
+    return {"status": "processed"}
+
+
+@app.post("/webhooks/generic")
+async def webhook_generic(request: Request) -> dict[str, str]:
+    """Generic webhook for any package update event."""
+    if _db is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    body = await request.json()
+    from depgraph.webhooks import handle_generic_webhook
+
+    handle_generic_webhook(_db.graph, body)
+    return {"status": "processed"}
 
 
 # --- Graph Visualization Data ---

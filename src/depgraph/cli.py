@@ -293,6 +293,176 @@ def serve(host: str, port: int) -> None:
     uvicorn.run("depgraph.api:app", host=host, port=port, reload=False)
 
 
+# --- Registry Ingestion ---
+
+
+@cli.command("ingest-npm")
+@click.argument("package_name")
+@click.option("--depth", "-d", default=3, help="Maximum dependency resolution depth.")
+@click.option("--dev-deps", is_flag=True, help="Include devDependencies.")
+@click.option("--clear/--no-clear", default=False, help="Clear graph first.")
+def ingest_npm_cmd(package_name: str, depth: int, dev_deps: bool, clear: bool) -> None:
+    """Ingest a real npm package and its transitive dependencies."""
+    from depgraph.ingest.registry import ingest_npm_package
+
+    db, _engine = _connect()
+    try:
+        if clear:
+            clear_graph(db.graph)
+            ensure_schema(db.graph)
+        console.print(f"Fetching [cyan]{package_name}[/cyan] from npm registry (depth={depth})...")
+        counts = ingest_npm_package(db.graph, package_name, max_depth=depth, include_dev=dev_deps)
+        table = Table(title="npm Ingestion Results")
+        table.add_column("Metric", style="cyan")
+        table.add_column("Count", style="green", justify="right")
+        for key, val in counts.items():
+            table.add_row(key.title(), str(val))
+        console.print(table)
+    finally:
+        db.close()
+
+
+@cli.command("ingest-pypi")
+@click.argument("package_name")
+@click.option("--depth", "-d", default=3, help="Maximum dependency resolution depth.")
+@click.option("--extras", is_flag=True, help="Include optional/extra dependencies.")
+@click.option("--clear/--no-clear", default=False, help="Clear graph first.")
+def ingest_pypi_cmd(package_name: str, depth: int, extras: bool, clear: bool) -> None:
+    """Ingest a real PyPI package and its transitive dependencies."""
+    from depgraph.ingest.registry import ingest_pypi_package
+
+    db, _engine = _connect()
+    try:
+        if clear:
+            clear_graph(db.graph)
+            ensure_schema(db.graph)
+        console.print(f"Fetching [cyan]{package_name}[/cyan] from PyPI (depth={depth})...")
+        counts = ingest_pypi_package(db.graph, package_name, max_depth=depth, include_extras=extras)
+        table = Table(title="PyPI Ingestion Results")
+        table.add_column("Metric", style="cyan")
+        table.add_column("Count", style="green", justify="right")
+        for key, val in counts.items():
+            table.add_row(key.title(), str(val))
+        console.print(table)
+    finally:
+        db.close()
+
+
+# --- SBOM ---
+
+
+@cli.command("export-sbom")
+@click.option(
+    "--format",
+    "sbom_format",
+    type=click.Choice(["cyclonedx", "spdx"]),
+    default="cyclonedx",
+    help="SBOM format.",
+)
+@click.option("--output", "-o", type=click.Path(), help="Output file (default: stdout).")
+def export_sbom_cmd(sbom_format: str, output: str | None) -> None:
+    """Export the dependency graph as an SBOM."""
+    from depgraph.sbom import export_cyclonedx, export_spdx
+
+    db, _engine = _connect()
+    try:
+        data = export_cyclonedx(db.graph) if sbom_format == "cyclonedx" else export_spdx(db.graph)
+
+        result = json.dumps(data, indent=2)
+        if output:
+            Path(output).write_text(result)
+            console.print(f"[green]SBOM exported to {output}[/green]")
+        else:
+            click.echo(result)
+    finally:
+        db.close()
+
+
+@cli.command("import-sbom")
+@click.argument("file_path", type=click.Path(exists=True))
+@click.option("--clear/--no-clear", default=False, help="Clear graph first.")
+def import_sbom_cmd(file_path: str, clear: bool) -> None:
+    """Import a CycloneDX or SPDX SBOM into the graph."""
+    from depgraph.sbom import import_sbom
+
+    db, _engine = _connect()
+    try:
+        if clear:
+            clear_graph(db.graph)
+            ensure_schema(db.graph)
+
+        with open(file_path) as f:
+            data = json.load(f)
+
+        counts = import_sbom(db.graph, data)
+        console.print(
+            f"[green]Imported {counts['packages']} packages, {counts['dependencies']} dependencies[/green]"
+        )
+    finally:
+        db.close()
+
+
+# --- Vulnerability Scanning ---
+
+
+@cli.command("scan-vulns")
+@click.option(
+    "--package", "-p", "package_name", help="Scan a single package (scans all if omitted)."
+)
+@click.option(
+    "--ecosystem",
+    "-e",
+    type=click.Choice(["npm", "PyPI"]),
+    default="npm",
+    help="Package ecosystem.",
+)
+@click.option("--json-output", "-j", is_flag=True, help="Output as JSON.")
+def scan_vulns_cmd(package_name: str | None, ecosystem: str, json_output: bool) -> None:
+    """Scan packages against the OSV.dev vulnerability database."""
+    from depgraph.ingest.osv import scan_and_ingest_package, scan_graph_packages
+
+    db, engine = _connect()
+    try:
+        if package_name:
+            pkg = engine.get_package(package_name)
+            if pkg is None:
+                console.print(f"[red]Package '{package_name}' not found[/red]")
+                sys.exit(1)
+            result = scan_and_ingest_package(db.graph, package_name, pkg.version, ecosystem)
+        else:
+            result = scan_graph_packages(db.graph)
+
+        if json_output:
+            click.echo(json.dumps(result, indent=2))
+            return
+
+        console.print("\n[bold]Vulnerability Scan Results[/bold]")
+        console.print(f"Packages scanned: {result.get('packages_scanned', 0)}")
+        console.print(
+            f"Vulnerabilities found: [bold red]{result.get('vulnerabilities_found', 0)}[/bold red]"
+        )
+
+        vulns = result.get("vulnerabilities", [])
+        if vulns:
+            table = Table(title="Vulnerabilities")
+            table.add_column("ID", style="cyan")
+            table.add_column("Severity", style="red")
+            table.add_column("Package", style="yellow")
+            table.add_column("Summary")
+            for v in vulns[:30]:
+                table.add_row(
+                    v["id"],
+                    v.get("severity", "?"),
+                    v.get("package", "?"),
+                    v.get("summary", "")[:60],
+                )
+            console.print(table)
+        else:
+            console.print("[green]No vulnerabilities found! ✅[/green]")
+    finally:
+        db.close()
+
+
 def _add_tree_nodes(tree: Tree, subtree: dict) -> None:
     """Recursively add nodes to a Rich tree from a nested dict."""
     for name, children in subtree.items():

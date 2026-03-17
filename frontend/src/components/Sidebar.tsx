@@ -6,6 +6,9 @@ const NAV_ITEMS = [
   { to: '/cycles', label: 'Cycles', icon: '🔄' },
   { to: '/centrality', label: 'Centrality', icon: '🎯' },
   { to: '/licenses', label: 'Licenses', icon: '📜' },
+  { to: '/import', label: 'Import', icon: '📦' },
+  { to: '/vulnerabilities', label: 'Vulnerabilities', icon: '🛡️' },
+  { to: '/export', label: 'SBOM Export', icon: '📋' },
 ];
 
 export default function Sidebar() {
