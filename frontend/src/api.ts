@@ -1,6 +1,6 @@
 /** API client for the DepGraph backend. */
 
-const BASE = '/api';
+const BASE = '';
 
 async function fetchJSON<T>(path: string): Promise<T> {
   const res = await fetch(`${BASE}${path}`);
