@@ -1,6 +1,6 @@
 /** API client for the DepGraph backend. */
 
-const BASE = '';
+const BASE = import.meta.env.VITE_API_BASE ?? (import.meta.env.DEV ? '/api' : '');
 
 async function fetchJSON<T>(path: string): Promise<T> {
   const res = await fetch(`${BASE}${path}`);
