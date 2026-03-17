@@ -490,7 +490,7 @@ body {
   font-size: 0.9rem;
 }
 
-.success-banner {
+.success-banner-green {
   background: rgba(34, 197, 94, 0.1);
   border: 1px solid rgba(34, 197, 94, 0.3);
   color: #22c55e;
@@ -532,8 +532,8 @@ table code {
   font-size: 0.8rem;
 }
 
-/* Stat card for scan results */
-.stat-card {
+/* Stat card variant for scan/import results */
+.scan-stat-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-left: 4px solid var(--accent);
@@ -541,14 +541,14 @@ table code {
   padding: 1rem 1.2rem;
 }
 
-.stat-value {
+.scan-stat-card .stat-value {
   font-size: 2rem;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
 }
 
-.stat-label {
+.scan-stat-card .stat-label {
   font-size: 0.8rem;
   color: var(--text-secondary);
   margin-top: 0.3rem;

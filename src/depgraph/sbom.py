@@ -203,7 +203,10 @@ def _import_cyclonedx(graph: Graph, data: dict[str, Any]) -> dict[str, int]:
 
     bom_ref_to_name: dict[str, str] = {}
     for comp in data.get("components", []):
-        name = comp["name"]
+        name = comp.get("name")
+        if not name:
+            logger.warning("cdx_component_skip", reason="missing name")
+            continue
         version = comp.get("version", "0.0.0")
         bom_ref = comp.get("bom-ref", name)
         bom_ref_to_name[bom_ref] = name
@@ -264,7 +267,10 @@ def _import_spdx(graph: Graph, data: dict[str, Any]) -> dict[str, int]:
 
     spdx_id_to_name: dict[str, str] = {}
     for pkg in data.get("packages", []):
-        name = pkg["name"]
+        name = pkg.get("name")
+        if not name:
+            logger.warning("spdx_package_skip", reason="missing name")
+            continue
         spdx_id = pkg.get("SPDXID", name)
         spdx_id_to_name[spdx_id] = name
 

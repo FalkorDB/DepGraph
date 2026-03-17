@@ -208,7 +208,7 @@ def ingest_pypi_package(
         Counts of ingested entities.
     """
     counts = {"packages": 0, "dependencies": 0, "errors": 0}
-    visited: set[str] = set()
+    visited: dict[str, str] = {}
     _resolve_pypi_recursive(graph, name, visited, counts, max_depth, include_extras, depth=0)
     logger.info("pypi_ingest_complete", root=name, **counts)
     return counts
@@ -217,7 +217,7 @@ def ingest_pypi_package(
 def _resolve_pypi_recursive(
     graph: Graph,
     name: str,
-    visited: set[str],
+    visited: dict[str, str],
     counts: dict[str, int],
     max_depth: int,
     include_extras: bool,
@@ -227,7 +227,7 @@ def _resolve_pypi_recursive(
     normalized = _normalize_pypi_name(name)
     if normalized in visited or depth > max_depth:
         return
-    visited.add(normalized)
+    visited[normalized] = name  # placeholder until we get canonical name
 
     try:
         pkg = fetch_pypi_package(name)
@@ -239,6 +239,9 @@ def _resolve_pypi_recursive(
         logger.warning("pypi_fetch_error", package=name, error=str(exc))
         counts["errors"] += 1
         return
+
+    # Store canonical name from API
+    visited[normalized] = pkg["name"]
 
     # Create package node
     graph.query(
@@ -269,12 +272,13 @@ def _resolve_pypi_recursive(
 
         dep_normalized = _normalize_pypi_name(dep_name)
         if dep_normalized in visited:
+            canonical_target = visited[dep_normalized]
             try:
                 graph.query(
                     queries.CREATE_DEPENDENCY,
                     {
                         "source": pkg["name"],
-                        "target": dep_name,
+                        "target": canonical_target,
                         "version_constraint": constraint or "*",
                         "dep_type": "optional" if is_extra else "runtime",
                     },
@@ -284,7 +288,7 @@ def _resolve_pypi_recursive(
                 logger.warning(
                     "pypi_dep_create_failed",
                     source=pkg["name"],
-                    target=dep_name,
+                    target=canonical_target,
                     error=str(exc),
                 )
 

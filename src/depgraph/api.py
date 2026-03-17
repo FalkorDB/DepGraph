@@ -310,11 +310,25 @@ def scan_package_vulnerabilities(
 # --- Webhooks for Incremental Updates ---
 
 
+async def _verify_webhook_signature(request: Request) -> None:
+    """Verify HMAC-SHA256 webhook signature if a secret is configured."""
+    config = load_config()
+    if not config.webhook_secret:
+        return
+    signature = request.headers.get("X-Webhook-Signature", "")
+    raw_body = await request.body()
+    from depgraph.webhooks import verify_hmac_signature
+
+    if not verify_hmac_signature(raw_body, signature, config.webhook_secret):
+        raise HTTPException(status_code=401, detail="Invalid webhook signature")
+
+
 @app.post("/webhooks/npm")
 async def webhook_npm(request: Request) -> dict[str, str]:
     """Receive npm registry webhook events for incremental graph updates."""
     if _db is None:
         raise HTTPException(status_code=503, detail="Database not connected")
+    await _verify_webhook_signature(request)
     body = await request.json()
     from depgraph.webhooks import handle_npm_webhook
 
@@ -327,6 +341,7 @@ async def webhook_pypi(request: Request) -> dict[str, str]:
     """Receive PyPI webhook events for incremental graph updates."""
     if _db is None:
         raise HTTPException(status_code=503, detail="Database not connected")
+    await _verify_webhook_signature(request)
     body = await request.json()
     from depgraph.webhooks import handle_pypi_webhook
 
@@ -339,6 +354,7 @@ async def webhook_generic(request: Request) -> dict[str, str]:
     """Generic webhook for any package update event."""
     if _db is None:
         raise HTTPException(status_code=503, detail="Database not connected")
+    await _verify_webhook_signature(request)
     body = await request.json()
     from depgraph.webhooks import handle_generic_webhook
 

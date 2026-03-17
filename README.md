@@ -363,7 +363,7 @@ depgraph ingest package.json
 
 ## Testing
 
-- **Unit tests** (47): Test all analysis logic with mock FalkorDB graph
+- **Unit tests** (106+): Test all analysis logic with mock FalkorDB graph
 - **Integration tests** (5): Test full pipeline against a real FalkorDB instance
 
 ```bash

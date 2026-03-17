@@ -100,7 +100,7 @@ export default function ImportView() {
         </div>
 
         {result && (
-          <div className="result-banner success-banner">
+          <div className="result-banner success-banner-green">
             ✅ Ingested <strong>{result.packages}</strong> packages and <strong>{result.dependencies}</strong> dependencies
             {result.errors ? <span> ({result.errors} errors)</span> : null}
           </div>
@@ -131,7 +131,7 @@ export default function ImportView() {
         </div>
 
         {sbomResult && (
-          <div className="result-banner success-banner">
+          <div className="result-banner success-banner-green">
             ✅ Imported <strong>{sbomResult.packages}</strong> packages and <strong>{sbomResult.dependencies}</strong> dependencies
           </div>
         )}

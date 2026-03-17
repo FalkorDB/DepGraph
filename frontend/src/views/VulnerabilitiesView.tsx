@@ -72,11 +72,11 @@ export default function VulnerabilitiesView() {
       {result && (
         <>
           <div className="stat-grid">
-            <div className="stat-card" style={{ borderLeftColor: '#4ECDC4' }}>
+            <div className="scan-stat-card" style={{ borderLeftColor: '#4ECDC4' }}>
               <div className="stat-value">{result.packages_scanned}</div>
               <div className="stat-label">Packages Scanned</div>
             </div>
-            <div className="stat-card" style={{ borderLeftColor: result.vulnerabilities_found > 0 ? '#ef4444' : '#22c55e' }}>
+            <div className="scan-stat-card" style={{ borderLeftColor: result.vulnerabilities_found > 0 ? '#ef4444' : '#22c55e' }}>
               <div className="stat-value">{result.vulnerabilities_found}</div>
               <div className="stat-label">Vulnerabilities Found</div>
             </div>
@@ -84,11 +84,11 @@ export default function VulnerabilitiesView() {
               const groups = groupBySeverity(result.vulnerabilities);
               return (
                 <>
-                  <div className="stat-card" style={{ borderLeftColor: '#ef4444' }}>
+                  <div className="scan-stat-card" style={{ borderLeftColor: '#ef4444' }}>
                     <div className="stat-value">{groups.critical}</div>
                     <div className="stat-label">Critical</div>
                   </div>
-                  <div className="stat-card" style={{ borderLeftColor: '#f97316' }}>
+                  <div className="scan-stat-card" style={{ borderLeftColor: '#f97316' }}>
                     <div className="stat-value">{groups.high}</div>
                     <div className="stat-label">High</div>
                   </div>
@@ -126,7 +126,7 @@ export default function VulnerabilitiesView() {
               </div>
             </div>
           ) : (
-            <div className="result-banner success-banner" style={{ marginTop: '1.5rem' }}>
+            <div className="result-banner success-banner-green" style={{ marginTop: '1.5rem' }}>
               ✅ No vulnerabilities found! Your dependency graph is clean.
             </div>
           )}
@@ -137,7 +137,7 @@ export default function VulnerabilitiesView() {
         <div className="card" style={{ marginTop: '1.5rem', textAlign: 'center', padding: '3rem' }}>
           <p style={{ fontSize: '1.2rem', color: '#94a3b8' }}>
             Click "Scan All Packages" to check every package in the graph against the
-            <a href="https://osv.dev" target="_blank" rel="noopener" style={{ color: '#4ECDC4', marginLeft: '4px' }}>
+            <a href="https://osv.dev" target="_blank" rel="noopener noreferrer" style={{ color: '#4ECDC4', marginLeft: '4px' }}>
               OSV.dev
             </a> vulnerability database.
           </p>

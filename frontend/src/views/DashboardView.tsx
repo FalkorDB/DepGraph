@@ -134,7 +134,7 @@ export default function DashboardView() {
             <h4>📦 {nodeDetail.name}</h4>
             <div className="detail-row"><span className="detail-label">Version</span><span>{nodeDetail.version}</span></div>
             <div className="detail-row"><span className="detail-label">License</span><span>{nodeDetail.license}</span></div>
-            <div className="detail-row"><span className="detail-label">Downloads</span><span>{nodeDetail.downloads.toLocaleString()}</span></div>
+            <div className="detail-row"><span className="detail-label">Downloads</span><span>{(nodeDetail.downloads ?? 0).toLocaleString()}</span></div>
             <div className="detail-row"><span className="detail-label">Description</span><span>{nodeDetail.description}</span></div>
           </div>
         )}

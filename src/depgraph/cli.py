@@ -430,7 +430,7 @@ def scan_vulns_cmd(package_name: str | None, ecosystem: str, json_output: bool) 
                 sys.exit(1)
             result = scan_and_ingest_package(db.graph, package_name, pkg.version, ecosystem)
         else:
-            result = scan_graph_packages(db.graph)
+            result = scan_graph_packages(db.graph, ecosystem=ecosystem)
 
         if json_output:
             click.echo(json.dumps(result, indent=2))

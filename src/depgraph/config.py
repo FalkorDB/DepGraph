@@ -30,6 +30,7 @@ class AppConfig:
     max_traversal_depth: int = field(
         default_factory=lambda: int(os.getenv("MAX_TRAVERSAL_DEPTH", "10"))
     )
+    webhook_secret: str = field(default_factory=lambda: os.getenv("WEBHOOK_SECRET", ""))
     db: FalkorDBConfig = field(default_factory=FalkorDBConfig)
 
 
