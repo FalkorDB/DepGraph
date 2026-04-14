@@ -10,25 +10,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@falkordb/canvas": "^0.0.44",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-router-dom": "^7.13.1"
+    "@falkordb/canvas": "^0.0.45",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-router-dom": "^7.14.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^25.5.0",
+    "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^6.0.0",
-    "eslint": "^10.0.3",
+    "eslint": "^10.2.0",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17.4.0",
+    "globals": "^17.5.0",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.56.1",
-    "vite": "^8.0.0"
+    "typescript-eslint": "^8.58.2",
+    "vite": "^8.0.8"
   },
   "overrides": {
     "eslint-plugin-react-hooks": {
